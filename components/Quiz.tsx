@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
     View, Text, TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    ScrollView
 } from 'react-native';
  
 import { quizData } from './quizData'
@@ -23,16 +24,22 @@ const Quiz = () => {
         const timer = setTimeout(() => {
             if (timeLeft > 0) {
                 setTimeLeft(timeLeft - 1);
+                
+                //setCount(count+1);
             } else {
-               
-                   
-                        setCurrentQuestion(shuffle(quizData)[0]);
-                        setChoice(shuffle(quizData[0].options));
-                        setTimeLeft(10);
-                        setCount(count+1);
-                        if(count==20) {
+                        
+                        
+                         if(count<20){
+                            setCurrentQuestion(shuffle(quizData)[0]);
+                            setChoice(shuffle(quizData[0].options));
+                            setCount(count+1);
+                            setTimeLeft(10);
+                         } else {
                          setQuizCompleted(true);
-                         
+                         //setCurrentQuestion(shuffle(quizData)[0]);
+                         //setChoice(shuffle(quizData[0].options));
+                         //setTimeLeft(10);
+                       
                         }
                
             }
@@ -52,25 +59,26 @@ const Quiz = () => {
         setTimeLeft(10);
         setCount(count+1);
         
-        if(count==20) {
+         if(count>=20) {
          setQuizCompleted(true);
-         
-        }
+        
+        } 
     };
  
     const handleRetest = () => {
-        setCurrentQuestion(0);
         setScore(0);
         setQuizCompleted(false);
+        setCount(1);
         setTimeLeft(10);
     };
     // Display questions and answers when the quiz is completed
-    const displayAnswers =
+     const displayAnswers =
         quizData.map((question, index) => (
             <View key={index}>
                 <Text style={styles.question}>
                     Question {index + 1}:
-                    {quizData[index].question}
+
+                   {/*  {quizData[index].question} */}
                 </Text>
                 <Text style={styles.correctAnswer}>
                     Correct Answer:
@@ -81,11 +89,13 @@ const Quiz = () => {
         ));
  
     return (
+        <ScrollView>
         <View style={styles.container}>
             {quizCompleted ? (
                 <View>
                     <Text style={styles.score}>
                         Your Score: {score}
+                      
                     </Text>
                     <Text style={styles.question}>
                         Questions and Answers:
@@ -102,7 +112,7 @@ const Quiz = () => {
             ) : (
                 <View>
                     <Text style={styles.question}>
-                        {currentQuestion?.question}
+                        {count}
                     </Text>
                     <Text style={styles.timer}>
                         Time Left: {timeLeft} sec
@@ -122,6 +132,7 @@ const Quiz = () => {
                 </View>
             )}
         </View>
+        </ScrollView>
     );
 };
  
